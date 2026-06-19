@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>마법소녀 이스케이프</title>
+  <meta name="description" content="마법소녀가 세 개의 소울 젬을 되찾고 마물 세계를 탈출하는 3D 퍼즐 탈출 게임 - 마법소녀 이스케이프" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Sans+KR:wght@300;400;700&family=Outfit:wght@400;700;900&display=swap');
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      overflow: hidden;
+      background: #000;
+      font-family: 'Noto Sans KR', sans-serif;
+      user-select: none;
+    }
+
+    #game-canvas {
+      display: block;
+      width: 100vw;
+      height: 100vh;
+      cursor: crosshair;
+    }
+
+    /* ===== FADE OVERLAY ===== */
+    #fade {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      opacity: 1;
+      pointer-events: none;
+      z-index: 1000;
+      transition: opacity 0.5s ease;
+    }
+
+    /* ===== STORY SCREEN ===== */
+    #story-screen {
+      position: fixed;
+      inset: 0;
+      background: url('./start_screen.jpg') no-repeat center center;
+      background-size: cover;
+      z-index: 500;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 1s ease;
+    }
+
+    #start-btn {
+      position: absolute;
+      bottom: 12.5%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 280px;
+      height: 64px;
+      background: linear-gradient(135deg, #ff75b5 0%, #ff2a7f 100%);
+      color: white;
+      border: 3px solid #ffd700;
+      border-radius: 32px;
+      font-size: 1.3rem;
+      font-weight: bold;
+      font-family: 'Outfit', 'Cinzel', sans-serif;
+      letter-spacing: 0.15em;
+      cursor: pointer;
+      outline: none;
+      box-shadow: 0 0 15px rgba(255, 42, 127, 0.4), inset 0 0 8px rgba(255, 215, 0, 0.4);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
+
+    #start-btn:hover {
+      box-shadow: 0 0 30px rgba(255, 42, 127, 0.9), inset 0 0 12px rgba(255, 215, 0, 0.8);
+      transform: translateX(-50%) translateY(-2px) scale(1.05);
+      border-color: #fff;
+    }
+
+    /* ===== DIALOGUE BOX ===== */
+    #dialogue-box-container {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      padding-bottom: 50px;
+      z-index: 600;
+      pointer-events: auto;
+    }
+
+    #dialogue-box {
+      width: 80%;
+      max-width: 850px;
+      background: rgba(255, 240, 245, 0.88);
+      backdrop-filter: blur(8px);
+      border: 3px solid #ff66aa;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(255, 105, 180, 0.5), inset 0 0 12px rgba(255, 215, 0, 0.6);
+      display: flex;
+      gap: 20px;
+      padding: 24px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    #dialogue-avatar {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #ff99cc 0%, #ff44aa 100%);
+      border: 2px solid #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 10px rgba(255, 105, 180, 0.6);
+      flex-shrink: 0;
+    }
+
+    .avatar-emblem {
+      font-size: 2.5rem;
+      animation: heartPulse 1.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes heartPulse {
+      from { transform: scale(1); }
+      to   { transform: scale(1.15); }
+    }
+
+    #dialogue-content {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-grow: 1;
+      text-align: left;
+    }
+
+    #dialogue-name {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #ff2277;
+      text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.8);
+    }
+
+    #dialogue-text {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: #4a0e2e;
+      font-weight: 500;
+    }
+
+    #dialogue-arrow {
+      position: absolute;
+      bottom: 12px;
+      right: 20px;
+      font-size: 1.1rem;
+      color: #ff66aa;
+      animation: bounceArrow 0.8s infinite alternate;
+    }
+
+    @keyframes bounceArrow {
+      from { transform: translateY(0); }
+      to   { transform: translateY(5px); }
+    }
+
+    /* ===== HUD ===== */
+    #hud {
+      position: fixed;
+      top: 24px;
+      left: 24px;
+      z-index: 100;
+      pointer-events: none;
+      display: none;
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,180,255,0.2);
+      border-radius: 16px;
+      padding: 14px 20px;
+    }
+
+    #hud .objective-label {
+      font-size: 0.65rem;
+      color: rgba(255,180,255,0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      margin-bottom: 4px;
+    }
+
+    #hud .objective-text {
+      font-size: 0.85rem;
+      color: #ffccee;
+      margin-bottom: 12px;
+    }
+
+    #hud .gem-label {
+      font-size: 0.65rem;
+      color: rgba(255,180,255,0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      margin-bottom: 6px;
+    }
+
+    #hud .gem-count-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #hud .gem-count {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(255,150,255,0.8);
+    }
+
+    #hud .gems-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .gem-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.2);
+      opacity: 0.25;
+      transition: opacity 0.5s, box-shadow 0.5s, border-color 0.5s;
+    }
+
+    .gem-icon.collected {
+      opacity: 1;
+      border-color: rgba(255,255,255,0.8);
+    }
+
+    .gem-icon.pink { background: radial-gradient(circle at 35% 35%, #ffbbdd, #ff44aa); }
+    .gem-icon.pink.collected { box-shadow: 0 0 12px #ff44aa; }
+    .gem-icon.blue { background: radial-gradient(circle at 35% 35%, #bbddff, #44aaff); }
+    .gem-icon.blue.collected { box-shadow: 0 0 12px #44aaff; }
+    .gem-icon.gold { background: radial-gradient(circle at 35% 35%, #ffffaa, #ffcc00); }
+    .gem-icon.gold.collected { box-shadow: 0 0 12px #ffcc00; }
+
+    /* ===== STAGE LABEL ===== */
+    #stage-label {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      pointer-events: none;
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      display: none;
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 50px;
+      padding: 8px 24px;
+      color: #fff;
+    }
+
+    /* ===== INTERACT PROMPT ===== */
+    #interact-prompt {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      pointer-events: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 30px;
+      padding: 10px 24px;
+      color: #fff;
+      display: none;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    /* ===== CROSSHAIR ===== */
+    #crosshair {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 16px;
+      height: 16px;
+      z-index: 100;
+      pointer-events: none;
+      display: none;
+    }
+
+    #crosshair::before, #crosshair::after {
+      content: '';
+      position: absolute;
+      background: rgba(255,255,255,0.8);
+      border-radius: 1px;
+    }
+    #crosshair::before { width: 2px; height: 100%; left: 50%; transform: translateX(-50%); }
+    #crosshair::after  { width: 100%; height: 2px; top: 50%; transform: translateY(-50%); }
+
+    /* ===== CONTROLS HINT ===== */
+    #controls-hint {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 100;
+      pointer-events: none;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.7rem;
+      line-height: 1.9;
+      text-align: right;
+      display: none;
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(4px);
+      border-radius: 10px;
+      padding: 8px 14px;
+    }
+
+    /* ===== RESPAWN MSG ===== */
+    #respawn-msg {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 150;
+      color: #fff;
+      font-size: 1.1rem;
+      display: none;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 16px 36px;
+      border-radius: 20px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ===== CLICK TO PLAY ===== */
+    #click-to-play {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    #click-to-play .inner {
+      padding: 22px 52px;
+      border: 2px solid rgba(255,180,255,0.5);
+      border-radius: 50px;
+      background: rgba(255,100,200,0.1);
+      color: #fff;
+      font-size: 1.1rem;
+      letter-spacing: 0.25em;
+      text-align: center;
+      font-family: 'Cinzel', serif;
+      animation: pulse-border 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulse-border {
+      from { border-color: rgba(255,100,200,0.3); box-shadow: 0 0 20px rgba(255,100,200,0.2); }
+      to   { border-color: rgba(255,180,255,0.8); box-shadow: 0 0 40px rgba(255,100,200,0.5); }
+    }
+
+    /* ===== PUZZLE UI ===== */
+    #puzzle-ui {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 150;
+      pointer-events: none;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    #puzzle-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      color: rgba(255,220,100,0.9);
+      letter-spacing: 0.2em;
+    }
+
+    #puzzle-sequence {
+      display: flex;
+      gap: 14px;
+    }
+
+    .seq-gem {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      border: 2px solid rgba(255,255,255,0.2);
+      opacity: 0.35;
+      transition: opacity 0.2s, box-shadow 0.2s, transform 0.2s;
+    }
+
+    .seq-gem.lit {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+
+    .seq-gem.correct { border-color: rgba(100,255,100,0.8); opacity: 1; }
+    .seq-gem.wrong   { border-color: rgba(255,80,80,0.8); opacity: 1; }
+
+    .seq-gem.c0 { background: radial-gradient(circle at 35% 35%, #ff8888, #cc0000); }
+    .seq-gem.c0.lit { box-shadow: 0 0 25px #ff4444; }
+    .seq-gem.c1 { background: radial-gradient(circle at 35% 35%, #88ff88, #00aa44); }
+    .seq-gem.c1.lit { box-shadow: 0 0 25px #44ff44; }
+    .seq-gem.c2 { background: radial-gradient(circle at 35% 35%, #8888ff, #2244cc); }
+    .seq-gem.c2.lit { box-shadow: 0 0 25px #4466ff; }
+    .seq-gem.c3 { background: radial-gradient(circle at 35% 35%, #ffee44, #cc8800); }
+    .seq-gem.c3.lit { box-shadow: 0 0 25px #ffcc00; }
+
+    #puzzle-message {
+      font-size: 0.9rem;
+      color: rgba(255,220,180,0.9);
+      letter-spacing: 0.1em;
+      text-align: center;
+      background: rgba(0,0,0,0.4);
+      padding: 8px 20px;
+      border-radius: 20px;
+    }
+
+    /* ===== ENDING SCREEN ===== */
+    #ending-screen {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(13, 26, 62, 0.15) 0%, rgba(0, 0, 0, 0.75) 100%);
+      z-index: 500;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 1s ease;
+      overflow: hidden;
+    }
+
+    .credits-container {
+      position: absolute;
+      top: 100%;
+      width: 100%;
+      text-align: center;
+      animation: scrollCredits 24s linear forwards;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 25px;
+      color: #fff;
+      font-family: 'Noto Sans KR', sans-serif;
+      text-shadow: 0 0 10px rgba(255, 105, 180, 0.8), 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+    
+    @keyframes scrollCredits {
+      0%   { top: 100%; }
+      100% { top: -140%; }
+    }
+
+    /* ===== GEM COLLECT POPUP ===== */
+    #gem-popup {
+      position: fixed;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 200;
+      text-align: center;
+      pointer-events: none;
+      display: none;
+      animation: popupAnim 2s ease forwards;
+    }
+
+    @keyframes popupAnim {
+      0%   { opacity: 0; transform: translate(-50%, -30%); }
+      20%  { opacity: 1; transform: translate(-50%, -50%); }
+      70%  { opacity: 1; transform: translate(-50%, -50%); }
+      100% { opacity: 0; transform: translate(-50%, -70%); }
+    }
+
+    #gem-popup .popup-inner {
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      padding: 20px 40px;
+      font-family: 'Cinzel', serif;
+      font-size: 1.2rem;
+      color: #fff;
+      letter-spacing: 0.1em;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="game-canvas"></canvas>
+
+  <!-- Fade overlay -->
+  <div id="fade"></div>
+
+  <!-- Story screen -->
+  <div id="story-screen">
+    <button id="start-btn">GAME START</button>
+  </div>
+
+  <!-- Dialogue Box Container (At body level to overlay 3D scene) -->
+  <div id="dialogue-box-container" style="display: none;">
+    <div id="dialogue-box">
+      <div id="dialogue-avatar">
+        <div class="avatar-emblem">💖</div>
+      </div>
+      <div id="dialogue-content">
+        <div id="dialogue-name">마법소녀 냐냐냥</div>
+        <div id="dialogue-text">...</div>
+      </div>
+      <div id="dialogue-arrow">▼</div>
+    </div>
+  </div>
+
+  <!-- HUD -->
+  <div id="hud">
+    <div class="objective-label">Current Objective</div>
+    <div class="objective-text" id="objective-text">Find the Soul Gems</div>
+    <div class="gem-label">Soul Gems</div>
+    <div class="gem-count-row">
+      <span class="gem-count"><span id="gem-count-num">0</span> / 3</span>
+    </div>
+    <div class="gems-row">
+      <div class="gem-icon pink" id="gem-pink"></div>
+      <div class="gem-icon blue" id="gem-blue"></div>
+      <div class="gem-icon gold" id="gem-gold"></div>
+    </div>
+  </div>
+
+  <!-- Stage label -->
+  <div id="stage-label"></div>
+
+  <!-- Interact prompt -->
+  <div id="interact-prompt">[ E ] Interact</div>
+
+  <!-- Crosshair -->
+  <div id="crosshair"></div>
+
+  <!-- Controls hint -->
+  <div id="controls-hint">
+    WASD — 이동<br>
+    마우스 — 시점<br>
+    Space — 점프<br>
+    Shift — 달리기<br>
+    E — 상호작용
+  </div>
+
+  <!-- Respawn message -->
+  <div id="respawn-msg">떨어졌다! 다시 시작...</div>
+
+  <!-- Click to play (pointer lock) -->
+  <div id="click-to-play">
+    <div class="inner">✦ 클릭하여 플레이 ✦</div>
+  </div>
+
+  <!-- Puzzle UI -->
+  <div id="puzzle-ui">
+    <div id="puzzle-title">MEMORY PUZZLE</div>
+    <div id="puzzle-sequence">
+      <div class="seq-gem" id="seq-0"></div>
+      <div class="seq-gem" id="seq-1"></div>
+      <div class="seq-gem" id="seq-2"></div>
+      <div class="seq-gem" id="seq-3"></div>
+    </div>
+    <div id="puzzle-message">순서를 기억하라...</div>
+  </div>
+
+  <!-- Gem collect popup -->
+  <div id="gem-popup">
+    <div class="popup-inner" id="gem-popup-text"></div>
+  </div>
+
+  <!-- Ending screen -->
+  <div id="ending-screen">
+    <div class="credits-container">
+      <div class="game-clear" style="font-size: 2.2rem; color: #ff66aa; font-weight: bold; text-shadow: 0 0 10px #ff3399; letter-spacing: 0.15em;">— GAME CLEAR —</div>
+      <div style="font-size: 1.5rem; font-family: 'Cinzel', serif; letter-spacing: 0.1em; color: #ffaadd;">마법소녀 이스케이프</div>
+      
+      <div style="margin-top: 50px; color: #ffd700; font-size: 1.2rem; letter-spacing: 0.1em;">[ 게임 기획 및 제작 ]</div>
+      <div style="font-size: 1.8rem; font-weight: bold; color: #fff; text-shadow: 0 0 8px rgba(255,255,255,0.6);">한지영</div>
+      
+      <div style="margin-top: 40px; color: #ffd700; font-size: 1.2rem; letter-spacing: 0.1em;">[ 컴퓨터 그래픽스 과제 제출용 ]</div>
+      <div style="font-size: 1.5rem; color: #fff; text-shadow: 0 0 8px rgba(255,255,255,0.6);">3D 컴퓨터 그래픽스 프로그래밍</div>
+      
+      <div style="margin-top: 60px; color: #ff88cc; font-size: 1.3rem; font-family: 'Cinzel', serif; letter-spacing: 0.25em; animation: pulseGlow 1.5s infinite alternate;">Thank you for playing!</div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
