@@ -23,6 +23,9 @@ export class UIManager {
 
     this.seqEls = [0,1,2,3].map(i => document.getElementById(`seq-${i}`));
 
+    this.playerNameInputEl = document.getElementById('player-name-input');
+    this.playerName        = '냐냐냥';
+
     this.restartBtnEl  = document.getElementById('restart-btn');
     this._restartBtnTimer = null;
     this._respawnTimer = null;
@@ -38,6 +41,13 @@ export class UIManager {
 
     const btn = document.getElementById('start-btn');
     btn.addEventListener('click', () => {
+      if (this.playerNameInputEl) {
+        const val = this.playerNameInputEl.value.trim();
+        this.playerName = val !== '' ? val : '냐냐냥';
+      } else {
+        this.playerName = '냐냐냥';
+      }
+
       this.storyEl.style.opacity = '0';
       setTimeout(() => {
         this.storyEl.style.display = 'none';
@@ -49,9 +59,14 @@ export class UIManager {
   showDialogue(pages, onComplete) {
     const container = document.getElementById('dialogue-box-container');
     const textEl = document.getElementById('dialogue-text');
+    const nameEl = document.getElementById('dialogue-name');
     if (!container || !textEl) {
       onComplete();
       return;
+    }
+
+    if (nameEl) {
+      nameEl.textContent = `마법소녀 ${this.playerName}`;
     }
 
     this.dialogueActive = true;
@@ -232,6 +247,11 @@ export class UIManager {
     this.endingEl.style.display     = 'flex';
     this.fadeEl.style.transition    = 'opacity 0.5s';
     this.fadeEl.style.opacity       = '0';
+
+    const creditsGirlEl = document.getElementById('credits-magical-girl');
+    if (creditsGirlEl) {
+      creditsGirlEl.textContent = this.playerName;
+    }
 
     if (this.restartBtnEl) {
       this.restartBtnEl.style.display = 'none';

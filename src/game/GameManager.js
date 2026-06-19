@@ -235,6 +235,9 @@ export class GameManager {
     // Hide hud and ending screens
     this.ui.hudEl.style.display   = 'none';
     this.ui.endingEl.style.display = 'none';
+    if (this.ui.playerNameInputEl) {
+      this.ui.playerNameInputEl.value = '';
+    }
 
     // 3. Reset player properties
     if (this.player) {
