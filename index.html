@@ -36,45 +36,168 @@
       transition: opacity 0.5s ease;
     }
 
-    /* ===== STORY SCREEN ===== */
-
     #story-screen {
       position: fixed;
       inset: 0;
-      background: url('./assets/start_screen-Bh1uBwK5.jpg') no-repeat center center;
-      background-size: cover;
+      background: linear-gradient(135deg, #1b0a26 0%, #3a0d2d 50%, #15061f 100%);
       z-index: 500;
       display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 8%;
+      transition: opacity 1s ease;
+      overflow: hidden;
+    }
+
+    #story-screen::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(255, 100, 180, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .title-left-container {
+      display: flex;
       flex-direction: column;
+      align-items: flex-start;
+      gap: 30px;
+      z-index: 10;
+      max-width: 520px;
+      animation: fadeInUp 1.2s ease forwards;
+    }
+
+    .title-logo-text {
+      font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+      font-weight: 900;
+      font-size: 3.8rem;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffaacc 0%, #ff3399 50%, #ffcc00 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 40px rgba(255, 50, 150, 0.4);
+      letter-spacing: -0.02em;
+    }
+
+    .title-sub-text {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.35em;
+      color: rgba(255, 200, 230, 0.85);
+      text-shadow: 0 0 15px rgba(255, 100, 180, 0.6);
+      text-transform: uppercase;
+      margin-top: -10px;
+      margin-left: 5px;
+    }
+
+    .name-input-box {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      border: 2px solid rgba(255, 100, 180, 0.35);
+      border-radius: 20px;
+      padding: 22px 26px;
+      box-shadow: 0 0 25px rgba(255, 50, 150, 0.15), inset 0 0 15px rgba(255, 255, 255, 0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .name-input-box:focus-within {
+      border-color: #ff66aa;
+      box-shadow: 0 0 35px rgba(255, 50, 150, 0.3), inset 0 0 15px rgba(255, 100, 180, 0.1);
+    }
+
+    .name-input-label {
+      font-size: 0.85rem;
+      color: rgba(255, 180, 220, 0.85);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    #player-name-input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 12px 18px;
+      color: #fff;
+      font-size: 1.1rem;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-weight: 700;
+      outline: none;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    #player-name-input::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    #player-name-input:focus {
+      border-color: #ffd700;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+    }
+
+    .title-right-container {
+      flex-grow: 1;
+      height: 100%;
+      display: flex;
       align-items: center;
       justify-content: center;
-      transition: opacity 1s ease;
+      position: relative;
+      animation: fadeInRight 1.5s ease forwards;
+    }
+
+    .title-character-img {
+      max-height: 85vh;
+      max-width: 45vw;
+      object-fit: contain;
+      filter: drop-shadow(0 0 35px rgba(255, 105, 180, 0.6)) drop-shadow(0 0 15px rgba(255, 215, 0, 0.3));
+      border-radius: 20px;
     }
 
     #start-btn {
-      position: absolute;
-      bottom: 11.2%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 480px;
-      height: 96px;
-      background: transparent;
-      color: transparent;
-      border: none;
-      border-radius: 48px;
+      position: relative;
+      margin-top: 10px;
+      width: 320px;
+      height: 64px;
+      background: linear-gradient(135deg, #ff75b5 0%, #ff2a7f 100%);
+      color: white;
+      border: 3px solid #ffd700;
+      border-radius: 32px;
+      font-size: 1.3rem;
+      font-weight: bold;
+      font-family: 'Outfit', 'Cinzel', sans-serif;
+      letter-spacing: 0.15em;
       cursor: pointer;
       outline: none;
-      box-shadow: none;
+      box-shadow: 0 0 20px rgba(255, 42, 127, 0.45), inset 0 0 8px rgba(255, 215, 0, 0.4);
       transition: all 0.3s ease;
       display: flex;
       align-items: center;
       justify-content: center;
-      text-shadow: none;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
     }
 
     #start-btn:hover {
-      box-shadow: 0 0 35px rgba(255, 215, 0, 0.45), inset 0 0 20px rgba(255, 215, 0, 0.35);
-      background: rgba(255, 255, 255, 0.04);
+      box-shadow: 0 0 35px rgba(255, 42, 127, 0.95), inset 0 0 12px rgba(255, 215, 0, 0.85);
+      transform: translateY(-2px) scale(1.03);
+      border-color: #fff;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInRight {
+      from { opacity: 0; transform: translateX(50px); }
+      to   { opacity: 1; transform: translateX(0); }
     }
 
     /* ===== DIALOGUE BOX ===== */
@@ -525,7 +648,7 @@
       letter-spacing: 0.1em;
     }
   </style>
-  <script type="module" crossorigin src="./assets/index-r2XpdJB2.js"></script>
+  <script type="module" crossorigin src="./assets/index-BUdsxv-9.js"></script>
 </head>
 <body>
   <canvas id="game-canvas"></canvas>
@@ -535,7 +658,25 @@
 
   <!-- Story screen -->
   <div id="story-screen">
-    <button id="start-btn">GAME START</button>
+    <div class="title-left-container">
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <h1 class="title-logo-text">마법소녀<br>이스케이프</h1>
+        <span class="title-sub-text">Magical Girl Escape</span>
+      </div>
+      
+      <div class="name-input-box">
+        <div class="name-input-label">
+          <span>💖 마법소녀의 이름을 지어주세요</span>
+        </div>
+        <input type="text" id="player-name-input" maxlength="8" placeholder="냐냐냥" />
+      </div>
+
+      <button id="start-btn">GAME START</button>
+    </div>
+    
+    <div class="title-right-container">
+      <img class="title-character-img" src="./assets/title_character-DyXDeGVR.jpg" alt="Magical Girl" />
+    </div>
   </div>
 
   <!-- Dialogue Box Container (At body level to overlay 3D scene) -->
@@ -615,8 +756,12 @@
     <div class="credits-container">
       <div class="game-clear" style="font-size: 2.2rem; color: #ff66aa; font-weight: bold; text-shadow: 0 0 10px #ff3399; letter-spacing: 0.15em;">— GAME CLEAR —</div>
       <div style="font-size: 1.5rem; font-family: 'Cinzel', serif; letter-spacing: 0.1em; color: #ffaadd;">마법소녀 이스케이프</div>
+      <div class="thank-you-msg" style="margin-top: 25px; font-size: 1.25rem; font-weight: bold; color: #ffbbdd; text-shadow: 0 0 8px rgba(255, 187, 221, 0.7); max-width: 600px; line-height: 1.6; font-family: 'Noto Sans KR', sans-serif;">“당신의 도움 덕분에<br>안전히 마물의 세계를 탈출했습니다!”</div>
       
-      <div style="margin-top: 50px; color: #ffd700; font-size: 1.2rem; letter-spacing: 0.1em;">[ 게임 기획 및 제작 ]</div>
+      <div style="margin-top: 45px; color: #ffd700; font-size: 1.2rem; letter-spacing: 0.1em;">[ 마법소녀 ]</div>
+      <div id="credits-magical-girl" style="font-size: 1.8rem; font-weight: bold; color: #fff; text-shadow: 0 0 8px rgba(255,255,255,0.6);">냐냐냥</div>
+
+      <div style="margin-top: 45px; color: #ffd700; font-size: 1.2rem; letter-spacing: 0.1em;">[ 게임 기획 및 제작 ]</div>
       <div style="font-size: 1.8rem; font-weight: bold; color: #fff; text-shadow: 0 0 8px rgba(255,255,255,0.6);">한지영</div>
       
       <div style="margin-top: 40px; color: #ffd700; font-size: 1.2rem; letter-spacing: 0.1em;">[ 컴퓨터 그래픽스 과제 제출용 ]</div>
