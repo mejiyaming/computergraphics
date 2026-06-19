@@ -218,6 +218,49 @@ export class GameManager {
     this.composer.render();
   }
 
+  // ========= RESTART =========
+
+  restart() {
+    // 1. Reset game state
+    this.gems = { pink: false, blue: false, gold: false };
+
+    // 2. Clear UI collected classes
+    const gemTypes = ['pink', 'blue', 'gold'];
+    gemTypes.forEach(type => {
+      const el = document.getElementById(`gem-${type}`);
+      if (el) el.classList.remove('collected');
+    });
+    if (this.ui.gemCountEl) this.ui.gemCountEl.textContent = '0';
+    
+    // Hide hud and ending screens
+    this.ui.hudEl.style.display   = 'none';
+    this.ui.endingEl.style.display = 'none';
+
+    // 3. Reset player properties
+    if (this.player) {
+      this.player.controlsDisabled = true;
+      this.player.vel.set(0, 0, 0);
+      this.player.isJumping = false;
+      this.player.pressedW = false;
+      this.player.pressedS = false;
+      this.player.pressedA = false;
+      this.player.pressedD = false;
+      this.player.pressedE = false;
+      this.player.pressedShift = false;
+      if (this.player.mesh) this.player.mesh.visible = true;
+    }
+
+    // 4. Dispose current scene
+    if (this.currentScene) {
+      this.currentScene.dispose();
+      this.currentScene = null;
+    }
+    this.currentSceneName = null;
+
+    // 5. Run start sequence again
+    this.start();
+  }
+
   // ========= RESIZE =========
 
   onResize(w, h) {

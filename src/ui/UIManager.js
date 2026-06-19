@@ -23,6 +23,8 @@ export class UIManager {
 
     this.seqEls = [0,1,2,3].map(i => document.getElementById(`seq-${i}`));
 
+    this.restartBtnEl  = document.getElementById('restart-btn');
+    this._restartBtnTimer = null;
     this._respawnTimer = null;
     this._popupTimer   = null;
     this.dialogueActive = false;
@@ -180,13 +182,19 @@ export class UIManager {
     if (this.puzzleMsgEl) this.puzzleMsgEl.textContent = text;
   }
 
-  highlightSeqGem(index, state) {
+  highlightSeqGem(index, state, colorVal = null) {
     // state: 'on' | 'off' | 'correct' | 'wrong'
     const el = this.seqEls[index];
     if (!el) return;
     el.classList.remove('lit', 'correct', 'wrong');
     if (state === 'on')      el.classList.add('lit');
-    else if (state === 'correct') el.classList.add('correct');
+    else if (state === 'correct') {
+      el.classList.add('correct');
+      if (colorVal !== null) {
+        el.classList.add(`c${colorVal}`);
+        el.classList.add('lit');
+      }
+    }
     else if (state === 'wrong')   el.classList.add('wrong');
   }
 
@@ -215,7 +223,7 @@ export class UIManager {
 
   // ========= ENDING =========
 
-  showEnding() {
+  showEnding(onRestartClicked) {
     this.hudEl.style.display        = 'none';
     this.crosshairEl.style.display  = 'none';
     this.controlsEl.style.display   = 'none';
@@ -224,6 +232,31 @@ export class UIManager {
     this.endingEl.style.display     = 'flex';
     this.fadeEl.style.transition    = 'opacity 0.5s';
     this.fadeEl.style.opacity       = '0';
+
+    if (this.restartBtnEl) {
+      this.restartBtnEl.style.display = 'none';
+      this.restartBtnEl.style.opacity = '0';
+      this.restartBtnEl.style.transition = 'opacity 1.2s ease';
+
+      if (this._restartBtnTimer) clearTimeout(this._restartBtnTimer);
+      this._restartBtnTimer = setTimeout(() => {
+        if (this.restartBtnEl) {
+          this.restartBtnEl.style.display = 'block';
+          // Force layout reflow
+          void this.restartBtnEl.offsetWidth;
+          this.restartBtnEl.style.opacity = '1';
+        }
+      }, 5500);
+
+      this.restartBtnEl.onclick = (e) => {
+        e.stopPropagation();
+        if (this._restartBtnTimer) clearTimeout(this._restartBtnTimer);
+        this.restartBtnEl.style.display = 'none';
+        this.restartBtnEl.style.opacity = '0';
+        this.endingEl.style.display     = 'none';
+        onRestartClicked();
+      };
+    }
   }
 
   // ========= FADE =========

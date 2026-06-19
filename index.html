@@ -51,33 +51,28 @@
 
     #start-btn {
       position: absolute;
-      bottom: 12.5%;
+      bottom: 11.2%;
       left: 50%;
       transform: translateX(-50%);
-      width: 280px;
-      height: 64px;
-      background: linear-gradient(135deg, #ff75b5 0%, #ff2a7f 100%);
-      color: white;
-      border: 3px solid #ffd700;
-      border-radius: 32px;
-      font-size: 1.3rem;
-      font-weight: bold;
-      font-family: 'Outfit', 'Cinzel', sans-serif;
-      letter-spacing: 0.15em;
+      width: 480px;
+      height: 96px;
+      background: transparent;
+      color: transparent;
+      border: none;
+      border-radius: 48px;
       cursor: pointer;
       outline: none;
-      box-shadow: 0 0 15px rgba(255, 42, 127, 0.4), inset 0 0 8px rgba(255, 215, 0, 0.4);
+      box-shadow: none;
       transition: all 0.3s ease;
       display: flex;
       align-items: center;
       justify-content: center;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+      text-shadow: none;
     }
 
     #start-btn:hover {
-      box-shadow: 0 0 30px rgba(255, 42, 127, 0.9), inset 0 0 12px rgba(255, 215, 0, 0.8);
-      transform: translateX(-50%) translateY(-2px) scale(1.05);
-      border-color: #fff;
+      box-shadow: 0 0 35px rgba(255, 215, 0, 0.45), inset 0 0 20px rgba(255, 215, 0, 0.35);
+      background: rgba(255, 255, 255, 0.04);
     }
 
     /* ===== DIALOGUE BOX ===== */
@@ -600,6 +595,7 @@
       
       <div style="margin-top: 60px; color: #ff88cc; font-size: 1.3rem; font-family: 'Cinzel', serif; letter-spacing: 0.25em; animation: pulseGlow 1.5s infinite alternate;">Thank you for playing!</div>
     </div>
+    <button id="restart-btn" style="position: absolute; bottom: 8%; left: 50%; transform: translateX(-50%); padding: 14px 40px; font-size: 1.15rem; font-weight: 700; color: #fff; background: linear-gradient(135deg, #ff66aa 0%, #ff2a7f 100%); border: 3px solid #ffd700; border-radius: 30px; cursor: pointer; box-shadow: 0 0 15px rgba(255, 42, 127, 0.5); transition: all 0.3s ease; font-family: 'Noto Sans KR', sans-serif; pointer-events: auto; z-index: 600; display: none; opacity: 0;">타이틀 화면으로</button>
   </div>
 
   <script type="module" src="/src/main.js"></script>

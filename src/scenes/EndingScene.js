@@ -554,7 +554,9 @@ export class EndingScene {
       // Trigger credits scroll
       if (!this.creditsShown) {
         this.creditsShown = true;
-        this.ui.showEnding();
+        this.ui.showEnding(() => {
+          this.gm.restart();
+        });
       }
     }
 

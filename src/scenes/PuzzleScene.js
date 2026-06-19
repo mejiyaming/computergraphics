@@ -507,7 +507,7 @@ export class PuzzleScene {
 
         if (chosen === expected) {
           this.inputSeq.push(chosen);
-          this.ui.highlightSeqGem(this.inputSeq.length - 1, 'correct');
+          this.ui.highlightSeqGem(this.inputSeq.length - 1, 'correct', chosen);
 
           if (this.inputSeq.length >= SEQUENCE_LENGTH) {
             this.roundsCleared++;
