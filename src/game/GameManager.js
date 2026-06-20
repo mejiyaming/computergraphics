@@ -158,7 +158,14 @@ export class GameManager {
   // ========= START =========
 
   start() {
-    this.ui     = new UIManager();
+    if (!this.ui) {
+      this.ui = new UIManager();
+    }
+    
+    // Clean up any old player model before spawning a new one
+    if (this.player) {
+      this.player.dispose();
+    }
     this.player = new Player(this.scene, this.camera);
 
     // Renderer settings
@@ -192,16 +199,21 @@ export class GameManager {
       });
     });
 
-    // Track pointer lock lost → show click-to-play
-    document.addEventListener('pointerlockchange', () => {
-      const locked = document.pointerLockElement === document.getElementById('game-canvas');
-      if (!locked && this.currentSceneName && this.currentSceneName !== 'ending') {
-        // No fullscreen overlay. The user can simply click the canvas to re-lock.
-      }
-    });
+    // Track pointer lock lost → show click-to-play (registered only once)
+    if (!this._pointerLockSetup) {
+      this._pointerLockSetup = true;
+      document.addEventListener('pointerlockchange', () => {
+        const locked = document.pointerLockElement === document.getElementById('game-canvas');
+        if (!locked && this.currentSceneName && this.currentSceneName !== 'ending') {
+          // No fullscreen overlay.
+        }
+      });
+    }
 
-    // Start game loop
-    this._animate();
+    // Start game loop (avoid duplicate loops)
+    if (!this._animId) {
+      this._animate();
+    }
   }
 
   // ========= GAME LOOP =========
@@ -239,18 +251,10 @@ export class GameManager {
       this.ui.playerNameInputEl.value = '';
     }
 
-    // 3. Reset player properties
+    // 3. Clean up and dispose old player instance
     if (this.player) {
-      this.player.controlsDisabled = true;
-      this.player.vel.set(0, 0, 0);
-      this.player.isJumping = false;
-      this.player.pressedW = false;
-      this.player.pressedS = false;
-      this.player.pressedA = false;
-      this.player.pressedD = false;
-      this.player.pressedE = false;
-      this.player.pressedShift = false;
-      if (this.player.mesh) this.player.mesh.visible = true;
+      this.player.dispose();
+      this.player = null;
     }
 
     // 4. Dispose current scene
