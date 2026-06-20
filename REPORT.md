@@ -63,22 +63,58 @@
 - **오프닝 연출**: 배경 이미지를 페이드 인 시키고 고해상도 글래스 스타트 버튼을 조율하여 게임 진입 연출.
 - **캐릭터**: 냐냐냥 모델은 양갈래 머리(Twin Tail), 머리에 얹힌 화이트 날개 핀, 가슴 및 뒷허리에 달린 화려한 레드 리본, 그리고 오른손에 쥐어진 마법의 스타-하트 요술봉(Magical Wand) 메쉬로 구성하여 "마법소녀" 컨셉을 극대화했습니다.
 
+![오프닝 시작 화면](./screenshots/start_screen.jpg)
+*그림 1: 오프닝 시작 화면 및 플레이어 이름 입력 UI*
+
+![JRPG 프롤로그 대화](./screenshots/dialogue_intro.jpg)
+*그림 2: 게임 진입 직후의 JRPG 프롤로그 대화 연출*
+
+![허브 맵 캐릭터 백뷰](./screenshots/hub_backview.jpg)
+*그림 3: 중앙 허브 광장의 마법진과 마법소녀 캐릭터 백뷰*
+
 ### 4.2 Stage 1: Pink Maze (미로 탈출)
 - **맵 기획**: 단순한 지그재그 통로 대신 막다른 길과 숨겨진 루프가 풍부한 **13x13 복합 미로** 구현.
 - **그래픽스 연출**: 벽면 상단에 빛나는 핑크색 서펠 글로우가 복도를 감싸고, 어두운 복도 코너마다 분산된 핑크 탐침 광원이 음영을 채우는 시각적 볼륨감을 형성합니다.
+
+![핑크 미로 안내 팝업](./screenshots/maze_entry.jpg)
+*그림 4: Pink Maze 구역 입장 시 중앙 글래스모피즘 안내 팝업 연출*
+
+![핑크 미로 플레이 및 GI 효과](./screenshots/maze_play.jpg)
+*그림 5: 미로 내부 벽면의 핑크 서펠(Surfel) 글로우 및 구석의 핑크색 간접 바운스 광원(DDGI 탐침)*
 
 ### 4.3 Stage 2: Blue Platform Jump Challenge (점프 챌린지)
 - **맵 기획**: 고도가 점진적으로 상승하는 공중 발판 배치 및 고도 하락 낙하 감지 시 시작 지점으로 리스폰하는 시스템 구축.
 - **그래픽스 연출**: 깊은 밤하늘의 짙은 네이비 배경에 흩날리는 3D 입자 별가루(Stars) 및 목표 젬의 강렬한 블루 방사 조도가 공중 발판을 감싸 안는 신비로운 음영 연출.
 
+![블루 점프맵 플레이](./screenshots/jump_play.jpg)
+*그림 6: 공중 발판 점프 챌린지 플레이 및 블루 간접광 효과*
+
 ### 4.4 Stage 3: Golden Memory Puzzle (메모리 퍼즐)
 - **맵 기획**: **총 3개 라운드(Round 1/3 ~ 3/3)**로 설계된 고난도 색상 기억 퍼즐.
 - **핵심 연출**: 라운드가 시작되면 중앙 제단의 색상 스퀘어가 **단 2초 동안만** 정답 시퀀스 컬러를 노출하고 사라집니다. 이후 3D 크리스탈이 순차적으로 빛나면, 사용자는 그 순서대로 밟아 활성화해야 합니다. 정답을 맞추면 제단에서 황금빛 소울 젬이 강림합니다.
+
+![메모리 퍼즐 정답 표시](./screenshots/puzzle_show.jpg)
+*그림 7: 라운드 개시 후 2초간 정답 색상 조합을 보여주는 단계*
+
+![메모리 퍼즐 정답 입력 대기](./screenshots/puzzle_blank.jpg)
+*그림 8: 정답 노출 후 스퀘어들이 회색으로 초기화되어 사용자의 3D 크리스탈 입력을 대기하는 단계*
 
 ### 4.5 Ending Flight Cinematic (엔딩 크레딧 & 탈출 애니메이션)
 - **상승 비행 시네마틱**: 3가지 소울 젬을 회수하고 파이널 포탈로 들어가면, 밤하늘 자색(`0x30153c`) 하늘로 마법소녀의 등 뒤에서 날개가 돋아나 펄럭이며 구름 위로 솟구쳐 오르는 비행 애니메이션 실행.
 - **카메라 틸트 업**: 비행 궤적에 맞춰 카메라가 캐릭터 밑에서 올려다보는 극적인 시점 변화 연출.
 - **크레딧 롤**: 비행 모션이 지속되는 가운데 화면 하단에서 엔딩 크레딧("마법소녀 이스케이프", "제작자 한지영", "컴퓨터 그래픽스 과제")이 상단으로 스크롤 업 처리.
+
+![파이널 포탈 개방](./screenshots/final_portal.jpg)
+*그림 9: 3개의 소울 젬을 모두 장착하여 포탈이 개방되었을 때의 대화 연출*
+
+![엔딩 날개 활성화](./screenshots/ending_wings.jpg)
+*그림 10: 파이널 포탈 진입 후 마법소녀의 날개가 펼쳐지는 시네마틱*
+
+![구름 위 상승 비행](./screenshots/ending_fly.jpg)
+*그림 11: 구름을 가르며 하늘로 솟구치는 상승 비행 연출*
+
+![엔딩 크레딧 롤](./screenshots/ending_credits.jpg)
+*그림 12: 하늘 비행을 배경으로 스크롤 업되는 엔딩 크레딧 화면*
 
 ---
 
@@ -89,18 +125,18 @@
 
 | 번호 | 스크린샷 요구 항목 | 권장 캡처 장면 | 연결 파일 경로 및 파일명 |
 |:---:|---|---|---|
-| **1** | 오프닝 시작 화면 | 마법소녀 이스케이프 시작 화면 및 GAME START 버튼 | `./screenshots/start_screen.jpg` |
-| **2** | JRPG 프롤로그 대화 | 인게임 진입 직후 냐냐냥의 대화창 연출 | `./screenshots/dialogue_intro.jpg` |
-| **3** | 허브 맵 & 캐릭터 백뷰 | 중앙 광장의 마법진과 마법소녀 캐릭터의 뒷모습 | `./screenshots/hub_backview.jpg` |
-| **4** | 핑크 미로 & 팝업 공지 | Pink Maze 진입 시 중앙에 뜨는 안내 팝업 | `./screenshots/maze_entry.jpg` |
-| **5** | 핑크 미로 탐색 (DDGI 핑크 탐침) | 미로 벽면 상단 서펠 조명과 코너 부근의 음영 | `./screenshots/maze_play.jpg` |
-| **6** | 블루 점프맵 (낙하 챌린지) | 공중 발판과 밤하늘의 3D 입자 별가루 및 블루 조명 | `./screenshots/jump_play.jpg` |
-| **7** | 메모리 퍼즐 (2초 정답 표시) | 골드 퍼즐 진입 직후 4개 스퀘어에 컬러가 들어온 화면 | `./screenshots/puzzle_show.jpg` |
-| **8** | 메모리 퍼즐 (정답 입력 단계) | 정답 노출 후 스퀘어가 블랭킹(회색) 처리된 화면 | `./screenshots/puzzle_blank.jpg` |
-| **9** | 파이널 포탈 개방 연출 | 3개 젬 획득 시 냐냐냥의 컷씬 대화 및 팝업 안내 | `./screenshots/final_portal.jpg` |
-| **10** | 엔딩 날개 스프로팅 시네마틱 | 마법소녀 등 뒤에서 날개가 돋아나 펄럭이기 시작하는 뒤편 클로즈업 | `./screenshots/ending_wings.jpg` |
-| **11** | 구름 위 비행 및 카메라 틸트 | 구름을 헤치며 하늘 위로 고속 비행하는 로우 앵글 화면 | `./screenshots/ending_fly.jpg` |
-| **12** | 엔딩 크레딧 롤 | 구름 속 비행 배경 위로 스크롤되는 최종 엔딩 크레딧 화면 | `./screenshots/ending_credits.jpg` |
+| **1** | 오프닝 시작 화면 | 마법소녀 이스케이프 시작 화면 및 GAME START 버튼 | [screenshots/start_screen.jpg](./screenshots/start_screen.jpg) |
+| **2** | JRPG 프롤로그 대화 | 인게임 진입 직후 냐냐냥의 대화창 연출 | [screenshots/dialogue_intro.jpg](./screenshots/dialogue_intro.jpg) |
+| **3** | 허브 맵 & 캐릭터 백뷰 | 중앙 광장의 마법진과 마법소녀 캐릭터의 뒷모습 | [screenshots/hub_backview.jpg](./screenshots/hub_backview.jpg) |
+| **4** | 핑크 미로 & 팝업 공지 | Pink Maze 진입 시 중앙에 뜨는 안내 팝업 | [screenshots/maze_entry.jpg](./screenshots/maze_entry.jpg) |
+| **5** | 핑크 미로 탐색 (DDGI 핑크 탐침) | 미로 벽면 상단 서펠 조명과 코너 부근의 음영 | [screenshots/maze_play.jpg](./screenshots/maze_play.jpg) |
+| **6** | 블루 점프맵 (낙하 챌린지) | 공중 발판과 밤하늘의 3D 입자 별가루 및 블루 조명 | [screenshots/jump_play.jpg](./screenshots/jump_play.jpg) |
+| **7** | 메모리 퍼즐 (2초 정답 표시) | 골드 퍼즐 진입 직후 4개 스퀘어에 컬러가 들어온 화면 | [screenshots/puzzle_show.jpg](./screenshots/puzzle_show.jpg) |
+| **8** | 메모리 퍼즐 (정답 입력 단계) | 정답 노출 후 스퀘어가 블랭킹(회색) 처리된 화면 | [screenshots/puzzle_blank.jpg](./screenshots/puzzle_blank.jpg) |
+| **9** | 파이널 포탈 개방 연출 | 3개 젬 획득 시 냐냐냥의 컷씬 대화 및 팝업 안내 | [screenshots/final_portal.jpg](./screenshots/final_portal.jpg) |
+| **10** | 엔딩 날개 스프로팅 시네마틱 | 마법소녀 등 뒤에서 날개가 돋아나 펄럭이기 시작하는 뒤편 클로즈업 | [screenshots/ending_wings.jpg](./screenshots/ending_wings.jpg) |
+| **11** | 구름 위 비행 및 카메라 틸트 | 구름을 헤치며 하늘 위로 고속 비행하는 로우 앵글 화면 | [screenshots/ending_fly.jpg](./screenshots/ending_fly.jpg) |
+| **12** | 엔딩 크레딧 롤 | 구름 속 비행 배경 위로 스크롤되는 최종 엔딩 크레딧 화면 | [screenshots/ending_credits.jpg](./screenshots/ending_credits.jpg) |
 
 ---
 
